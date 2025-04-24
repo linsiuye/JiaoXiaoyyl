@@ -27,7 +27,7 @@
             margin-left: -150px;
             background-size: contain;
             background-repeat: no-repeat;
-            transition: transform 0.1s linear;
+            /* 移除transition属性 */
             z-index: 2;
             pointer-events: none;
         }
@@ -159,8 +159,8 @@ const Sakana = (() => {
         
         physicsParams = {...CHARACTERS[currentCharacter]};
         if (isMobile()) {
-            physicsParams.inertia = 0.55; // 增加移动端的惯性，让运动更快
-            physicsParams.decay = 0.975; // 减小衰减，让运动持续更久
+            physicsParams.inertia = 0.8; // 增加惯性系数提升响应速度
+            physicsParams.decay = 0.985; // 调整衰减系数保持运动时长
         } else {
             physicsParams.inertia = 0.12;
             physicsParams.decay = 0.975;
@@ -215,12 +215,10 @@ const Sakana = (() => {
         ctx.lineCap = 'round';
         ctx.stroke();
 
-        // 计算弹簧端点的偏移角度，作为图片的旋转角度
-        const angle = Math.atan2(endY - baseY, endX - baseX) * (180 / Math.PI);
-        // 设置图片的位置和旋转角度
         characterEl.style.transform = `
-            translate(${endX - 150}px, ${endY - 600}px)
-            rotate(${angle}deg)
+            rotate(${physicsParams.r}deg)
+            translateX(${physicsParams.r}px)
+            translateY(${physicsParams.y}px)
         `;
     }
 
