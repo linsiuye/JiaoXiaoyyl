@@ -124,8 +124,8 @@ const Sakana = (() => {
     const MOBILE_SPRING = {
         baseY: 800,
         length: 320,
-        tension: -3.5, // 增加张力，让弹簧更硬
-        curvature: 1.8 // 调整曲率
+        tension: -4.5, // 进一步增加张力，让弹簧更硬
+        curvature: 2.0 // 增大曲率
     };
 
     let SPRING;
@@ -158,8 +158,13 @@ const Sakana = (() => {
         characterEl = containerEl.querySelector('.sakana-character');
         
         physicsParams = {...CHARACTERS[currentCharacter]};
-        physicsParams.inertia = 0.12;
-        physicsParams.decay = 0.975;
+        if (isMobile()) {
+            physicsParams.inertia = 0.15; // 增加移动端的惯性，让运动更快
+            physicsParams.decay = 0.96; // 减小衰减，让运动持续更久
+        } else {
+            physicsParams.inertia = 0.12;
+            physicsParams.decay = 0.975;
+        }
     }
 
     function setupEventListeners() {
