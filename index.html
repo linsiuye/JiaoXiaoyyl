@@ -159,7 +159,7 @@ const Sakana = (() => {
         
         physicsParams = {...CHARACTERS[currentCharacter]};
         if (isMobile()) {
-            physicsParams.inertia = 0.15; // 增加移动端的惯性，让运动更快
+            physicsParams.inertia = 0.55; // 增加移动端的惯性，让运动更快
             physicsParams.decay = 0.99; // 减小衰减，让运动持续更久
         } else {
             physicsParams.inertia = 0.12;
