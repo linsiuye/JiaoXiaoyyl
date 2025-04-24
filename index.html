@@ -215,10 +215,12 @@ const Sakana = (() => {
         ctx.lineCap = 'round';
         ctx.stroke();
 
+        // 计算弹簧端点的偏移角度，作为图片的旋转角度
+        const angle = Math.atan2(endY - baseY, endX - baseX) * (180 / Math.PI);
+        // 设置图片的位置和旋转角度
         characterEl.style.transform = `
-            rotate(${physicsParams.r}deg)
-            translateX(${physicsParams.r}px)
-            translateY(${physicsParams.y}px)
+            translate(${endX - 150}px, ${endY - 600}px)
+            rotate(${angle}deg)
         `;
     }
 
