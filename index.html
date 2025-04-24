@@ -268,9 +268,62 @@ const Sakana = (() => {
             currentCharacter = currentCharacter === 'chisato' ? 'takina' : 'chisato';
             recreateCanvas();
             setupEventListeners();
+        },
+        // 新增方法用于自动摆动
+        autoSwing: (w, t) => {
+            physicsParams.w = w;
+            physicsParams.t = t;
+        },
+        // 新增方法获取当前状态
+        isAtRest: () => {
+            return Math.abs(physicsParams.r) < 1 && 
+                   Math.abs(physicsParams.y) < 1 &&
+                   Math.abs(physicsParams.w) < 1 &&
+                   Math.abs(physicsParams.t) < 1;
         }
     };
 })();
+
+// 全局控制函数
+function toggleAuto() {
+    const btn = document.querySelector('[onclick="toggleAuto()"]');
+    if(window.autoTimer) {
+        clearTimeout(window.autoTimer);
+        window.autoTimer = null;
+        btn.classList.remove('active');
+    } else {
+        btn.classList.add('active');
+        let isSwinging = false;
+        
+        function checkRestState() {
+            if(!Sakana.isAtRest()) {
+                window.autoTimer = setTimeout(checkRestState, 100);
+                return;
+            }
+            
+            // 延长间隔时间到2500ms
+            window.autoTimer = setTimeout(() => {
+                // 减小推力参数（原120→60，原80→40）
+                Sakana.autoSwing(
+                    60 * (Math.random() > 0.5 ? 1 : -1),
+                    40 * (Math.random() > 0.5 ? 1 : -1)
+                );
+                isSwinging = true;
+                
+                window.autoTimer = setTimeout(function checkMovement() {
+                    if(Sakana.isAtRest()) {
+                        isSwinging = false;
+                        checkRestState();
+                    } else {
+                        window.autoTimer = setTimeout(checkMovement, 100);
+                    }
+                }, 800); // 稍微延长检测延迟
+            }, 2500); // 间隔时间调整为2.5秒
+        }
+        
+        checkRestState();
+    }
+}
 
 // 初始化
 Sakana.init('#sakana-widget');
@@ -284,20 +337,9 @@ function switchCharacter() {
     Sakana.switchCharacter();
 }
 
-function toggleAuto() {
-    const btn = document.querySelector('[onclick="toggleAuto()"]');
-    if(window.autoInterval) {
-        clearInterval(window.autoInterval);
-        window.autoInterval = null;
-        btn.classList.remove('active');
-    } else {
-        btn.classList.add('active');
-        window.autoInterval = setInterval(() => {
-            physicsParams.w += (Math.random() - 0.5) * 150;
-            physicsParams.t += (Math.random() - 0.5) * 100;
-        }, 2000);
-    }
-}
+// 删除以下重复定义的错误函数（从这行开始）
+/////////////////////////////////////////////////////////////
+// 删除以下重复定义的错误函数（到此处结束）
 </script>
 </body>
 </html>
