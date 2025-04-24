@@ -141,8 +141,10 @@ const Sakana = (() => {
         characterEl = containerEl.querySelector('.sakana-character');
         
         physicsParams = {...CHARACTERS[currentCharacter]};
-        physicsParams.inertia = 0.12;
-        physicsParams.decay = 0.975;
+        // 增大惯性系数
+        physicsParams.inertia = 0.2; 
+        // 调整衰减系数
+        physicsParams.decay = 0.96; 
     }
 
     function setupEventListeners() {
@@ -212,8 +214,9 @@ const Sakana = (() => {
             const x = (e.clientX || e.touches[0].clientX) - rect.left - startX;
             const y = (e.clientY || e.touches[0].clientY) - rect.top - startY;
             
-            physicsParams.r = Math.max(-60, Math.min(60, x * 0.15));
-            physicsParams.y = Math.max(-110, Math.min(110, y * 0.2));
+            // 调整系数让移动更灵敏
+            physicsParams.r = Math.max(-60, Math.min(60, x * 0.2)); 
+            physicsParams.y = Math.max(-110, Math.min(110, y * 0.3)); 
         };
 
         const endHandler = () => {
